@@ -48,16 +48,73 @@
   }
 
   /* ---------- Top die-id bar ---------- */
-  .diebar{
+  /* ---------- Sticky nav / scrollspy ---------- */
+  nav.pinbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:rgba(14,18,16,0.9);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--hairline);
+  }
+  .pinbar-inner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    text-decoration:none;
+    padding:12px 0;
+    flex:none;
+  }
+  .brand-mark{
     font-family:var(--mono);
     font-size:11px;
-    letter-spacing:0.08em;
-    color:var(--muted);
-    border-bottom:1px solid var(--hairline);
-    padding:10px 0;
+    font-weight:700;
+    letter-spacing:0.04em;
+    color:var(--die-black);
+    background:var(--copper);
+    border-radius:3px;
+    padding:3px 6px;
+    line-height:1.4;
   }
-  .diebar .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
-  .diebar span{ color:var(--signal-cyan); }
+  .brand-name{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--off-white);
+    letter-spacing:0.01em;
+    white-space:nowrap;
+  }
+  .pinbar-links{
+    display:flex;
+    align-items:center;
+    gap:2px;
+    overflow-x:auto;
+  }
+  nav.pinbar a[data-nav]{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-decoration:none;
+    padding:13px 14px;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  nav.pinbar a[data-nav]:hover{ color:var(--off-white); }
+  nav.pinbar a[data-nav].active{ color:var(--copper-bright); border-bottom-color:var(--copper); }
+  nav.pinbar a[data-nav] .pin{ color:var(--copper); margin-right:3px; }
+
+  @media (max-width:560px){
+    .brand-name{ display:none; }
+    nav.pinbar a[data-nav]{ padding:13px 9px; font-size:10.5px; }
+  }
 
   /* ---------- Hero ---------- */
   header.hero{ padding:64px 0 40px; position:relative; }
@@ -90,11 +147,62 @@
   .role-line .rev{ color:var(--muted); }
 
   .contact-row{
-    display:flex; flex-wrap:wrap; gap:14px 20px;
+    display:flex; flex-wrap:wrap; align-items:center; gap:14px 16px;
     font-family:var(--mono); font-size:12.5px; color:var(--muted);
   }
   .contact-row a{ text-decoration:none; border-bottom:1px dotted var(--hairline); padding-bottom:1px; }
   .contact-row a:hover{ border-color:var(--copper-bright); }
+  .contact-item{ display:inline-flex; align-items:center; gap:6px; }
+  .copy-btn{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--muted);
+    background:none;
+    border:1px solid var(--hairline);
+    border-radius:3px;
+    padding:2px 6px;
+    cursor:pointer;
+    line-height:1.4;
+    transition:color .2s ease, border-color .2s ease;
+  }
+  .copy-btn:hover{ color:var(--signal-cyan); border-color:var(--signal-cyan); }
+  .copy-btn.copied{ color:var(--copper-bright); border-color:var(--copper); }
+
+  .hero-actions{ margin-top:24px; display:flex; flex-wrap:wrap; gap:12px; }
+  .btn-download{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    text-decoration:none;
+    color:var(--die-black);
+    background:var(--copper);
+    border:1px solid var(--copper);
+    border-radius:3px;
+    padding:10px 16px;
+    transition:background .2s ease, transform .15s ease;
+  }
+  .btn-download:hover{ background:var(--copper-bright); transform:translateY(-1px); }
+  .btn-download svg{ width:14px; height:14px; flex:none; }
+  .btn-ghost{
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    text-decoration:none;
+    color:var(--off-white);
+    background:transparent;
+    border:1px solid var(--hairline);
+    border-radius:3px;
+    padding:10px 16px;
+    cursor:pointer;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .btn-ghost:hover{ border-color:var(--signal-cyan); color:var(--signal-cyan); }
 
   /* floorplan svg */
   .floorplan{ width:100%; height:auto; }
@@ -130,8 +238,9 @@
   }
 
   /* ---------- Section shell ---------- */
-  section{ padding:34px 0; border-top:1px solid var(--hairline); }
+  section{ padding:34px 0; border-top:1px solid var(--hairline); scroll-margin-top:52px; }
   section.no-border{ border-top:none; }
+  #education, #skills{ scroll-margin-top:52px; }
 
   .sec-label{
     font-family:var(--mono);
@@ -169,6 +278,14 @@
     border-left:2px solid var(--copper);
   }
   .ip-block:hover{ border-left-color:var(--signal-cyan); }
+  .ip-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
   .ip-tag{
     font-family:var(--mono);
     font-size:10.5px;
@@ -185,8 +302,23 @@
     margin:0 0 10px;
     color:var(--off-white);
   }
+  .ip-chevron{
+    flex:none;
+    width:18px; height:18px;
+    color:var(--muted);
+    transition:transform .25s ease, color .2s ease;
+    margin-top:2px;
+  }
+  .ip-block.open .ip-chevron{ transform:rotate(180deg); color:var(--copper); }
+  .ip-body{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .3s ease;
+  }
+  .ip-block.open .ip-body{ grid-template-rows:1fr; }
+  .ip-body-inner{ overflow:hidden; }
   .ip-block ul{ margin:0; padding-left:18px; color:#c9c6ba; font-size:14.5px; }
-  .ip-block li{ margin-bottom:7px; }
+  .ip-block li{ margin-bottom:7px; padding-top:2px; }
   .ip-block li::marker{ color:var(--copper); }
 
   /* ---------- Two column: education / skills ---------- */
@@ -221,30 +353,61 @@
   footer a{ text-decoration:none; }
 
   ::selection{ background:var(--copper); color:var(--die-black); }
+
+  @media print{
+    nav.pinbar, .hero-actions, .copy-btn, .ip-chevron{ display:none !important; }
+    body{ background:#fff; color:#111; }
+    .fp-block{ fill:#f2f2f2; stroke:#ccc; }
+    .ip-block.open .ip-body{ grid-template-rows:1fr; }
+  }
 </style>
 </head>
 <body>
 
-<div class="diebar">
-  <div class="wrap">
-    <span>DIE: SAKB-RTL-01</span>
-    <span>PROC: RISC-V / SoC</span>
-    <span>STATUS: <span>OPEN TO WORK</span></span>
+<nav class="pinbar">
+  <div class="wrap pinbar-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">SAKB</span>
+      <span class="brand-name">S Aditha Krishna Bhat</span>
+    </a>
+    <div class="pinbar-links">
+      <a href="#summary" data-nav><span class="pin">·</span>Summary</a>
+      <a href="#experience" data-nav><span class="pin">·</span>Experience</a>
+      <a href="#education" data-nav><span class="pin">·</span>Education</a>
+      <a href="#skills" data-nav><span class="pin">·</span>Skills</a>
+    </div>
   </div>
-</div>
+</nav>
 
 <div class="wrap">
-  <header class="hero">
+  <header class="hero" id="top">
     <div class="hero-grid">
       <div>
         <p class="eyebrow">Résumé // RTL &amp; SoC Architecture</p>
-        <h1>S Aditha Krishna Bhat</h1>
+        <h1><!--AUTO:NAME-->S Aditha Krishna Bhat<!--/AUTO:NAME--></h1>
         <p class="role-line">RTL DESIGN ENGINEER <span class="rev">// RISC-V SoC Subsystems</span></p>
         <div class="contact-row">
-          <span>Bengaluru, India</span>
-          <a href="tel:+919844237346">+91 98442 37346</a>
-          <a href="mailto:sadithakrishnabhat@gmail.com">sadithakrishnabhat@gmail.com</a>
-          <a href="https://linkedin.com/in/s-aditha-krishna-bhat" target="_blank" rel="noopener">linkedin.com/in/s-aditha-krishna-bhat</a>
+          <span><!--AUTO:LOCATION-->Bengaluru, India<!--/AUTO:LOCATION--></span>
+          <span class="contact-item">
+            <a href="tel:<!--AUTO:PHONE_HREF-->+919844237346<!--/AUTO:PHONE_HREF-->"><!--AUTO:PHONE-->+91 98442 37346<!--/AUTO:PHONE--></a>
+            <button class="copy-btn" data-copy="+91 98442 37346" aria-label="Copy phone number">copy</button>
+          </span>
+          <span class="contact-item">
+            <a href="mailto:<!--AUTO:EMAIL-->sadithakrishnabhat@gmail.com<!--/AUTO:EMAIL-->"><!--AUTO:EMAIL2-->sadithakrishnabhat@gmail.com<!--/AUTO:EMAIL2--></a>
+            <button class="copy-btn" data-copy="sadithakrishnabhat@gmail.com" aria-label="Copy email address">copy</button>
+          </span>
+          <a href="<!--AUTO:LINKEDIN_URL-->https://linkedin.com/in/s-aditha-krishna-bhat<!--/AUTO:LINKEDIN_URL-->" target="_blank" rel="noopener"><!--AUTO:LINKEDIN_TEXT-->linkedin.com/in/s-aditha-krishna-bhat<!--/AUTO:LINKEDIN_TEXT--></a>
+        </div>
+
+        <div class="hero-actions">
+          <a class="btn-download" href="S_Aditha_Krishna_Bhat_CV.pdf" download>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            Download CV (PDF)
+          </a>
+          <button class="btn-ghost" id="printBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>
+            Print / Save as PDF
+          </button>
         </div>
       </div>
       <div>
@@ -293,68 +456,90 @@
     </div>
   </header>
 
-  <section class="no-border">
+  <section class="no-border" id="summary">
     <p class="sec-label">Summary <span class="addr">0x00</span></p>
-    <p class="summary-text">RTL Design Engineer with 5+ years of experience designing RISC-V SoC subsystems from microarchitecture definition through RTL implementation, CDC/LINT closure, and tape-out readiness. Experienced in translating architecture specifications into synthesizable RTL, driving design quality, and collaborating with architecture, verification, and firmware teams. Seeking opportunities in SoC Architecture and RTL Design where architectural exploration and implementation ownership are combined.</p>
+    <p class="summary-text"><!--AUTO:SUMMARY-->RTL Design Engineer with 5+ years of experience designing RISC-V SoC subsystems from microarchitecture definition through RTL implementation, CDC/LINT closure, and tape-out readiness. Experienced in translating architecture specifications into synthesizable RTL, driving design quality, and collaborating with architecture, verification, and firmware teams. Seeking opportunities in SoC Architecture and RTL Design where architectural exploration and implementation ownership are combined.<!--/AUTO:SUMMARY--></p>
   </section>
 
-  <section>
+  <section id="experience">
     <p class="sec-label">Experience <span class="addr">0x01</span></p>
 
     <div class="job-head">
-      <div class="job-title">Hardware Engineer, ACL Digital — Bengaluru, India</div>
-      <div class="job-dates">2021 – Present</div>
+      <div class="job-title"><!--AUTO:JOB_TITLE-->Hardware Engineer, ACL Digital — Bengaluru, India<!--/AUTO:JOB_TITLE--></div>
+      <div class="job-dates"><!--AUTO:JOB_DATES-->2021 – Present<!--/AUTO:JOB_DATES--></div>
     </div>
 
-    <div class="ip-block">
-      <div class="ip-tag"><b>Project 1</b> — RISC-V Input-Output Memory Management Unit (IoMMU)</div>
+    <div class="ip-block open" data-accordion>
+      <div class="ip-head" data-toggle>
+        <div class="ip-tag"><b>Project 1</b> — <!--AUTO:P1_TITLE-->RISC-V Input-Output Memory Management Unit (IoMMU)<!--/AUTO:P1_TITLE--></div>
+        <svg class="ip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="ip-body"><div class="ip-body-inner">
       <ul>
+      <!--AUTO:P1_BULLETS-->
         <li>Owned the microarchitecture definition and RTL implementation of an IoMMU block for a RISC-V SoC, translating architecture specifications into synthesizable SystemVerilog.</li>
         <li>Designed address translation, permission checking, and memory protection logic while ensuring seamless integration with the SoC memory subsystem.</li>
         <li>Collaborated with arch and verification teams throughout design reviews and RTL quality closure.</li>
+      <!--/AUTO:P1_BULLETS-->
       </ul>
+      </div></div>
     </div>
 
-    <div class="ip-block">
-      <div class="ip-tag"><b>Project 2</b> — RISC-V Advanced Interrupt Architecture (AIA)</div>
+    <div class="ip-block open" data-accordion>
+      <div class="ip-head" data-toggle>
+        <div class="ip-tag"><b>Project 2</b> — <!--AUTO:P2_TITLE-->RISC-V Advanced Interrupt Architecture (AIA)<!--/AUTO:P2_TITLE--></div>
+        <svg class="ip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="ip-body"><div class="ip-body-inner">
       <ul>
+      <!--AUTO:P2_BULLETS-->
         <li>Designed and implemented RTL modules for interrupt management compliant with the RISC-V Advanced Interrupt Architecture (AIA) specification.</li>
         <li>Participated in microarchitecture discussions to define block interfaces, CSR mapping, interrupt routing, and pipeline behavior.</li>
         <li>Performed CDC and LINT analysis using Synopsys tools, achieving clean sign-off, and developed register interfaces to accelerate firmware bring-up and system debugging.</li>
+      <!--/AUTO:P2_BULLETS-->
       </ul>
+      </div></div>
     </div>
 
-    <div class="ip-block">
-      <div class="ip-tag"><b>Project 3</b> — IP Verification &amp; Design Quality Improvement</div>
+    <div class="ip-block open" data-accordion>
+      <div class="ip-head" data-toggle>
+        <div class="ip-tag"><b>Project 3</b> — <!--AUTO:P3_TITLE-->IP Verification &amp; Design Quality Improvement<!--/AUTO:P3_TITLE--></div>
+        <svg class="ip-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </div>
+      <div class="ip-body"><div class="ip-body-inner">
       <ul>
+      <!--AUTO:P3_BULLETS-->
         <li>Led design quality analysis for multiple communication interface IPs during SoC integration and tape-out preparation.</li>
         <li>Developed CDC constraint files, analyzed schematics and timing reports, and resolved integration issues identified through industry-standard EDA flows.</li>
         <li>Improved RTL quality by driving CDC/LINT closure and collaborating with multiple teams to deliver tape-out-ready IPs.</li>
+      <!--/AUTO:P3_BULLETS-->
       </ul>
+      </div></div>
     </div>
   </section>
 
   <section>
     <div class="twocol">
-      <div>
+      <div id="education">
         <p class="sec-label">Education <span class="addr">0x02</span></p>
         <div class="edu-item">
-          <div class="deg">PG Certificate in VLSI Design</div>
-          <div class="school">IIT Roorkee</div>
-          <div class="meta">Aug 2023</div>
+          <div class="deg"><!--AUTO:EDU1_SECONDARY-->PG Certificate in VLSI Design<!--/AUTO:EDU1_SECONDARY--></div>
+          <div class="school"><!--AUTO:EDU1_PRIMARY-->IIT Roorkee<!--/AUTO:EDU1_PRIMARY--></div>
+          <div class="meta"><!--AUTO:EDU1_DATES-->Aug 2023<!--/AUTO:EDU1_DATES--></div>
         </div>
         <div class="edu-item">
-          <div class="deg">Bachelor of Engineering, Electrical and Electronics Engineering</div>
-          <div class="meta">2017 – 2021 · CGPA: 7.34 / 10</div>
+          <div class="deg"><!--AUTO:EDU2_PRIMARY-->Bachelor of Engineering<!--/AUTO:EDU2_PRIMARY-->, <!--AUTO:EDU2_SECONDARY-->Electrical and Electronics Engineering<!--/AUTO:EDU2_SECONDARY--></div>
+          <div class="meta"><!--AUTO:EDU2_DATES-->2017 – 2021<!--/AUTO:EDU2_DATES--> · <!--AUTO:EDU_NOTE-->CGPA: 7.34 / 10<!--/AUTO:EDU_NOTE--></div>
         </div>
       </div>
 
-      <div>
+      <div id="skills">
         <p class="sec-label">Technical Skills <span class="addr">0x03</span></p>
 
         <div class="skill-row">
           <div class="cat">Architecture &amp; RTL Design</div>
           <div class="chips">
+          <!--AUTO:SKILL_ARCH-->
             <span class="chip">RISC-V Architecture</span>
             <span class="chip">Microarchitecture</span>
             <span class="chip">RTL Design</span>
@@ -362,52 +547,61 @@
             <span class="chip">Verilog</span>
             <span class="chip">FSM Design</span>
             <span class="chip">SoC Integration</span>
+          <!--/AUTO:SKILL_ARCH-->
           </div>
         </div>
 
         <div class="skill-row">
           <div class="cat">Design Verification &amp; Quality</div>
           <div class="chips">
+          <!--AUTO:SKILL_DV-->
             <span class="chip">Code Coverage Analysis</span>
             <span class="chip">CDC (Clock Domain Crossing)</span>
             <span class="chip">LINT</span>
             <span class="chip">SpyGlass</span>
             <span class="chip">JasperGold</span>
+          <!--/AUTO:SKILL_DV-->
           </div>
         </div>
 
         <div class="skill-row">
           <div class="cat">EDA Tools</div>
           <div class="chips">
+          <!--AUTO:SKILL_EDA-->
             <span class="chip">Synopsys Verdi</span>
             <span class="chip">Synopsys Design Compiler</span>
             <span class="chip">SpyGlass</span>
             <span class="chip">Cadence Xcelium</span>
             <span class="chip">QuestaSim</span>
             <span class="chip">Questa Visualizer</span>
+          <!--/AUTO:SKILL_EDA-->
           </div>
         </div>
 
         <div class="skill-row">
           <div class="cat">Programming</div>
           <div class="chips">
+          <!--AUTO:SKILL_PROG-->
             <span class="chip">SystemVerilog</span>
             <span class="chip">Verilog</span>
             <span class="chip">C</span>
             <span class="chip">Python</span>
+          <!--/AUTO:SKILL_PROG-->
           </div>
         </div>
 
         <div class="skill-row">
           <div class="cat">Core Competencies</div>
           <div class="chips">
+          <!--AUTO:SKILL_CORE-->
             <span class="chip">RTL Implementation</span>
-            <span class="chip">Architecture Spec Interpretation</span>
+            <span class="chip">Architecture Specification Interpretation</span>
             <span class="chip">Microarchitecture Development</span>
             <span class="chip">CDC/LINT Closure</span>
             <span class="chip">Design Quality Analysis</span>
             <span class="chip">IP Integration</span>
             <span class="chip">Cross-functional Collaboration</span>
+          <!--/AUTO:SKILL_CORE-->
           </div>
         </div>
       </div>
@@ -417,10 +611,75 @@
 
 <footer>
   <div class="wrap">
-    <span>© S Aditha Krishna Bhat</span>
-    <span><a href="mailto:sadithakrishnabhat@gmail.com">sadithakrishnabhat@gmail.com</a> · <a href="https://linkedin.com/in/s-aditha-krishna-bhat" target="_blank" rel="noopener">LinkedIn</a></span>
+    <span>© <!--AUTO:NAME_FOOTER-->S Aditha Krishna Bhat<!--/AUTO:NAME_FOOTER--></span>
+    <span><a href="mailto:<!--AUTO:EMAIL_FOOTER-->sadithakrishnabhat@gmail.com<!--/AUTO:EMAIL_FOOTER-->"><!--AUTO:EMAIL_FOOTER2-->sadithakrishnabhat@gmail.com<!--/AUTO:EMAIL_FOOTER2--></a> · <a href="<!--AUTO:LINKEDIN_URL_FOOTER-->https://linkedin.com/in/s-aditha-krishna-bhat<!--/AUTO:LINKEDIN_URL_FOOTER-->" target="_blank" rel="noopener">LinkedIn</a></span>
   </div>
 </footer>
 
+<script>
+  // ---- Accordion toggle for project blocks ----
+  document.querySelectorAll('[data-accordion]').forEach(function(block){
+    var head = block.querySelector('[data-toggle]');
+    head.addEventListener('click', function(){
+      block.classList.toggle('open');
+    });
+  });
+
+  // ---- Copy-to-clipboard for contact info ----
+  document.querySelectorAll('.copy-btn').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      var text = btn.getAttribute('data-copy');
+      var done = function(){
+        var original = btn.textContent;
+        btn.textContent = 'copied';
+        btn.classList.add('copied');
+        setTimeout(function(){
+          btn.textContent = original;
+          btn.classList.remove('copied');
+        }, 1500);
+      };
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(done).catch(done);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try{ document.execCommand('copy'); }catch(err){}
+        document.body.removeChild(ta);
+        done();
+      }
+    });
+  });
+
+  // ---- Print / Save as PDF ----
+  var printBtn = document.getElementById('printBtn');
+  if(printBtn){
+    printBtn.addEventListener('click', function(){ window.print(); });
+  }
+
+  // ---- Scrollspy nav ----
+  var navLinks = Array.prototype.slice.call(document.querySelectorAll('[data-nav]'));
+  var targets = navLinks.map(function(a){
+    return document.querySelector(a.getAttribute('href'));
+  }).filter(Boolean);
+
+  if('IntersectionObserver' in window && targets.length){
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        var id = '#' + entry.target.id;
+        var link = navLinks.find(function(a){ return a.getAttribute('href') === id; });
+        if(!link) return;
+        if(entry.isIntersecting){
+          navLinks.forEach(function(a){ a.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+
+    targets.forEach(function(t){ observer.observe(t); });
+  }
+</script>
 </body>
 </html>
