@@ -2,7 +2,7 @@
 
 Personal résumé website for **S Aditha Krishna Bhat** — RTL Design Engineer, RISC-V SoC Subsystems.
 
-🔗 Live site: https://sakb-sakb.github.io/
+🔗 Live site: [https://sakb-sakb.github.io/](https://sakb-sakb.github.io/sakb.github.io/)
 
 ## About
 
