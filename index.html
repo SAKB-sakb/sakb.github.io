@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S Aditha Krishna Bhat — RTL Design Engineer</title>
+<meta name="description" content="S Aditha Krishna Bhat — RTL Design Engineer. RISC-V SoC subsystem design, microarchitecture, CDC/LINT closure, tape-out readiness.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --die-black:#0e1210;
+    --pcb-panel:#141b17;
+    --pcb-panel-2:#182019;
+    --copper:#c87f4a;
+    --copper-bright:#e2a465;
+    --signal-cyan:#6fafa6;
+    --off-white:#edeae0;
+    --muted:#8b948c;
+    --hairline:#26302a;
+    --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background:var(--die-black);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(200,127,74,0.07), transparent),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 40px);
+    color:var(--off-white);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:var(--copper-bright); }
+
+  .wrap{
+    max-width:920px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ---------- Top die-id bar ---------- */
+  .diebar{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--muted);
+    border-bottom:1px solid var(--hairline);
+    padding:10px 0;
+  }
+  .diebar .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+  .diebar span{ color:var(--signal-cyan); }
+
+  /* ---------- Hero ---------- */
+  header.hero{ padding:64px 0 40px; position:relative; }
+  .hero-grid{ display:grid; grid-template-columns:1.15fr 1fr; gap:40px; align-items:center; }
+  @media (max-width:760px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.16em;
+    color:var(--copper);
+    text-transform:uppercase;
+    margin:0 0 14px;
+  }
+  h1{
+    font-family:var(--mono);
+    font-weight:700;
+    font-size:clamp(28px,4.4vw,44px);
+    line-height:1.12;
+    margin:0 0 10px;
+    color:var(--off-white);
+    letter-spacing:-0.01em;
+  }
+  .role-line{
+    font-family:var(--mono);
+    font-size:15px;
+    color:var(--signal-cyan);
+    margin:0 0 22px;
+  }
+  .role-line .rev{ color:var(--muted); }
+
+  .contact-row{
+    display:flex; flex-wrap:wrap; gap:14px 20px;
+    font-family:var(--mono); font-size:12.5px; color:var(--muted);
+  }
+  .contact-row a{ text-decoration:none; border-bottom:1px dotted var(--hairline); padding-bottom:1px; }
+  .contact-row a:hover{ border-color:var(--copper-bright); }
+
+  /* floorplan svg */
+  .floorplan{ width:100%; height:auto; }
+  .fp-block{
+    fill:var(--pcb-panel-2);
+    stroke:var(--hairline);
+    stroke-width:1;
+    transition:fill .25s ease, stroke .25s ease;
+  }
+  .fp-block:hover{ fill:#1c2621; stroke:var(--copper); }
+  .fp-label{
+    font-family:var(--mono);
+    font-size:9.5px;
+    fill:var(--muted);
+    letter-spacing:0.05em;
+  }
+  .fp-trace{
+    fill:none;
+    stroke:var(--copper);
+    stroke-width:1.4;
+    stroke-dasharray:6 5000;
+    animation:draw 2.6s ease forwards;
+  }
+  .fp-trace.cyan{ stroke:var(--signal-cyan); }
+  .fp-pad{ fill:var(--copper); }
+  @keyframes draw{
+    from{ stroke-dashoffset:900; stroke-dasharray:900; }
+    to{ stroke-dashoffset:0; stroke-dasharray:900; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .fp-trace{ animation:none; stroke-dasharray:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ---------- Section shell ---------- */
+  section{ padding:34px 0; border-top:1px solid var(--hairline); }
+  section.no-border{ border-top:none; }
+
+  .sec-label{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--copper);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:0 0 20px;
+  }
+  .sec-label::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--hairline);
+  }
+  .sec-label .addr{ color:var(--muted); font-weight:400; }
+
+  .summary-text{ font-size:16px; color:#d8d5cb; max-width:70ch; }
+
+  /* ---------- Experience ---------- */
+  .job-head{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; margin-bottom:22px; }
+  .job-title{ font-family:var(--mono); font-size:16px; font-weight:600; color:var(--off-white); }
+  .job-dates{ font-family:var(--mono); font-size:13px; color:var(--muted); }
+
+  .ip-block{
+    border:1px solid var(--hairline);
+    background:var(--pcb-panel);
+    border-radius:3px;
+    padding:18px 20px;
+    margin-bottom:16px;
+    position:relative;
+    border-left:2px solid var(--copper);
+  }
+  .ip-block:hover{ border-left-color:var(--signal-cyan); }
+  .ip-tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:0.1em;
+    color:var(--muted);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  .ip-tag b{ color:var(--copper-bright); font-weight:600; }
+  .ip-block h3{
+    font-family:var(--sans);
+    font-size:15.5px;
+    font-weight:600;
+    margin:0 0 10px;
+    color:var(--off-white);
+  }
+  .ip-block ul{ margin:0; padding-left:18px; color:#c9c6ba; font-size:14.5px; }
+  .ip-block li{ margin-bottom:7px; }
+  .ip-block li::marker{ color:var(--copper); }
+
+  /* ---------- Two column: education / skills ---------- */
+  .twocol{ display:grid; grid-template-columns:1fr 1.4fr; gap:36px; }
+  @media (max-width:760px){ .twocol{ grid-template-columns:1fr; } }
+
+  .edu-item{ margin-bottom:16px; }
+  .edu-item .deg{ font-weight:600; color:var(--off-white); font-size:15px; }
+  .edu-item .school{ font-family:var(--mono); font-size:12.5px; color:var(--signal-cyan); margin-top:2px; }
+  .edu-item .meta{ font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:2px; }
+
+  .skill-row{ margin-bottom:16px; }
+  .skill-row .cat{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--copper); margin-bottom:8px;
+  }
+  .chips{ display:flex; flex-wrap:wrap; gap:7px; }
+  .chip{
+    font-family:var(--mono);
+    font-size:12px;
+    color:#d8d5cb;
+    background:var(--pcb-panel);
+    border:1px solid var(--hairline);
+    border-radius:3px;
+    padding:5px 10px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:30px 0 50px; border-top:1px solid var(--hairline); }
+  footer .wrap{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+  footer{ font-family:var(--mono); font-size:11.5px; color:var(--muted); }
+  footer a{ text-decoration:none; }
+
+  ::selection{ background:var(--copper); color:var(--die-black); }
+</style>
+</head>
+<body>
+
+<div class="diebar">
+  <div class="wrap">
+    <span>DIE: SAKB-RTL-01</span>
+    <span>PROC: RISC-V / SoC</span>
+    <span>STATUS: <span>OPEN TO WORK</span></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Résumé // RTL &amp; SoC Architecture</p>
+        <h1>S Aditha Krishna Bhat</h1>
+        <p class="role-line">RTL DESIGN ENGINEER <span class="rev">// RISC-V SoC Subsystems</span></p>
+        <div class="contact-row">
+          <span>Bengaluru, India</span>
+          <a href="tel:+919844237346">+91 98442 37346</a>
+          <a href="mailto:sadithakrishnabhat@gmail.com">sadithakrishnabhat@gmail.com</a>
+          <a href="https://linkedin.com/in/s-aditha-krishna-bhat" target="_blank" rel="noopener">linkedin.com/in/s-aditha-krishna-bhat</a>
+        </div>
+      </div>
+      <div>
+        <!-- Signature element: a floorplan diagram of the three real projects from the resume -->
+        <svg class="floorplan" viewBox="0 0 380 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Chip floorplan diagram representing IOMMU, AIA and IP verification blocks">
+          <rect x="4" y="4" width="372" height="232" rx="4" fill="none" stroke="#26302a" stroke-width="1"/>
+
+          <!-- traces -->
+          <path class="fp-trace" d="M95,60 L190,60 L190,110" />
+          <path class="fp-trace cyan" d="M285,60 L190,60" />
+          <path class="fp-trace" d="M190,150 L190,180 L95,180" />
+          <path class="fp-trace cyan" d="M190,180 L285,180" />
+
+          <!-- pads -->
+          <circle class="fp-pad" cx="95" cy="60" r="2.4"/>
+          <circle class="fp-pad" cx="285" cy="60" r="2.4"/>
+          <circle class="fp-pad" cx="95" cy="180" r="2.4"/>
+          <circle class="fp-pad" cx="285" cy="180" r="2.4"/>
+
+          <!-- IOMMU block -->
+          <rect class="fp-block" x="30" y="35" width="130" height="50" rx="2"/>
+          <text class="fp-label" x="42" y="55">PROJECT 1</text>
+          <text class="fp-label" x="42" y="70" fill="#edeae0" font-size="11">IOMMU</text>
+
+          <!-- AIA block -->
+          <rect class="fp-block" x="220" y="35" width="130" height="50" rx="2"/>
+          <text class="fp-label" x="232" y="55">PROJECT 2</text>
+          <text class="fp-label" x="232" y="70" fill="#edeae0" font-size="11">AIA</text>
+
+          <!-- Core (center) -->
+          <rect class="fp-block" x="145" y="105" width="90" height="50" rx="2"/>
+          <text class="fp-label" x="157" y="125">SOC CORE</text>
+          <text class="fp-label" x="157" y="140" fill="#edeae0" font-size="11">MEM SUBSYS</text>
+
+          <!-- IP verification block -->
+          <rect class="fp-block" x="30" y="155" width="130" height="50" rx="2"/>
+          <text class="fp-label" x="42" y="175">PROJECT 3</text>
+          <text class="fp-label" x="42" y="190" fill="#edeae0" font-size="11">IP VERIF / DQ</text>
+
+          <!-- CDC/LINT block -->
+          <rect class="fp-block" x="220" y="155" width="130" height="50" rx="2"/>
+          <text class="fp-label" x="232" y="175">SIGN-OFF</text>
+          <text class="fp-label" x="232" y="190" fill="#edeae0" font-size="11">CDC / LINT</text>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <section class="no-border">
+    <p class="sec-label">Summary <span class="addr">0x00</span></p>
+    <p class="summary-text">RTL Design Engineer with 5+ years of experience designing RISC-V SoC subsystems from microarchitecture definition through RTL implementation, CDC/LINT closure, and tape-out readiness. Experienced in translating architecture specifications into synthesizable RTL, driving design quality, and collaborating with architecture, verification, and firmware teams. Seeking opportunities in SoC Architecture and RTL Design where architectural exploration and implementation ownership are combined.</p>
+  </section>
+
+  <section>
+    <p class="sec-label">Experience <span class="addr">0x01</span></p>
+
+    <div class="job-head">
+      <div class="job-title">Hardware Engineer, ACL Digital — Bengaluru, India</div>
+      <div class="job-dates">2021 – Present</div>
+    </div>
+
+    <div class="ip-block">
+      <div class="ip-tag"><b>Project 1</b> — RISC-V Input-Output Memory Management Unit (IoMMU)</div>
+      <ul>
+        <li>Owned the microarchitecture definition and RTL implementation of an IoMMU block for a RISC-V SoC, translating architecture specifications into synthesizable SystemVerilog.</li>
+        <li>Designed address translation, permission checking, and memory protection logic while ensuring seamless integration with the SoC memory subsystem.</li>
+        <li>Collaborated with arch and verification teams throughout design reviews and RTL quality closure.</li>
+      </ul>
+    </div>
+
+    <div class="ip-block">
+      <div class="ip-tag"><b>Project 2</b> — RISC-V Advanced Interrupt Architecture (AIA)</div>
+      <ul>
+        <li>Designed and implemented RTL modules for interrupt management compliant with the RISC-V Advanced Interrupt Architecture (AIA) specification.</li>
+        <li>Participated in microarchitecture discussions to define block interfaces, CSR mapping, interrupt routing, and pipeline behavior.</li>
+        <li>Performed CDC and LINT analysis using Synopsys tools, achieving clean sign-off, and developed register interfaces to accelerate firmware bring-up and system debugging.</li>
+      </ul>
+    </div>
+
+    <div class="ip-block">
+      <div class="ip-tag"><b>Project 3</b> — IP Verification &amp; Design Quality Improvement</div>
+      <ul>
+        <li>Led design quality analysis for multiple communication interface IPs during SoC integration and tape-out preparation.</li>
+        <li>Developed CDC constraint files, analyzed schematics and timing reports, and resolved integration issues identified through industry-standard EDA flows.</li>
+        <li>Improved RTL quality by driving CDC/LINT closure and collaborating with multiple teams to deliver tape-out-ready IPs.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="twocol">
+      <div>
+        <p class="sec-label">Education <span class="addr">0x02</span></p>
+        <div class="edu-item">
+          <div class="deg">PG Certificate in VLSI Design</div>
+          <div class="school">IIT Roorkee</div>
+          <div class="meta">Aug 2023</div>
+        </div>
+        <div class="edu-item">
+          <div class="deg">Bachelor of Engineering, Electrical and Electronics Engineering</div>
+          <div class="meta">2017 – 2021 · CGPA: 7.34 / 10</div>
+        </div>
+      </div>
+
+      <div>
+        <p class="sec-label">Technical Skills <span class="addr">0x03</span></p>
+
+        <div class="skill-row">
+          <div class="cat">Architecture &amp; RTL Design</div>
+          <div class="chips">
+            <span class="chip">RISC-V Architecture</span>
+            <span class="chip">Microarchitecture</span>
+            <span class="chip">RTL Design</span>
+            <span class="chip">SystemVerilog</span>
+            <span class="chip">Verilog</span>
+            <span class="chip">FSM Design</span>
+            <span class="chip">SoC Integration</span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="cat">Design Verification &amp; Quality</div>
+          <div class="chips">
+            <span class="chip">Code Coverage Analysis</span>
+            <span class="chip">CDC (Clock Domain Crossing)</span>
+            <span class="chip">LINT</span>
+            <span class="chip">SpyGlass</span>
+            <span class="chip">JasperGold</span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="cat">EDA Tools</div>
+          <div class="chips">
+            <span class="chip">Synopsys Verdi</span>
+            <span class="chip">Synopsys Design Compiler</span>
+            <span class="chip">SpyGlass</span>
+            <span class="chip">Cadence Xcelium</span>
+            <span class="chip">QuestaSim</span>
+            <span class="chip">Questa Visualizer</span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="cat">Programming</div>
+          <div class="chips">
+            <span class="chip">SystemVerilog</span>
+            <span class="chip">Verilog</span>
+            <span class="chip">C</span>
+            <span class="chip">Python</span>
+          </div>
+        </div>
+
+        <div class="skill-row">
+          <div class="cat">Core Competencies</div>
+          <div class="chips">
+            <span class="chip">RTL Implementation</span>
+            <span class="chip">Architecture Spec Interpretation</span>
+            <span class="chip">Microarchitecture Development</span>
+            <span class="chip">CDC/LINT Closure</span>
+            <span class="chip">Design Quality Analysis</span>
+            <span class="chip">IP Integration</span>
+            <span class="chip">Cross-functional Collaboration</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>© S Aditha Krishna Bhat</span>
+    <span><a href="mailto:sadithakrishnabhat@gmail.com">sadithakrishnabhat@gmail.com</a> · <a href="https://linkedin.com/in/s-aditha-krishna-bhat" target="_blank" rel="noopener">LinkedIn</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
